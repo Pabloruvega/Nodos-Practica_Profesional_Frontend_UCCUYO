@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const HISTORIAL_KEY = 'historial_mineria';
 
 export function getHistorial() {
@@ -27,4 +29,13 @@ export function eliminarBusqueda(id) {
 export function limpiarHistorial() {
   localStorage.removeItem(HISTORIAL_KEY);
   return [];
+}
+
+export function useHistorial() {
+  const [historial, setHistorial] = useState(() => getHistorial());
+
+  const eliminar = (id) => setHistorial(eliminarBusqueda(id));
+  const limpiar = () => setHistorial(limpiarHistorial());
+
+  return { historial, eliminar, limpiar };
 }
