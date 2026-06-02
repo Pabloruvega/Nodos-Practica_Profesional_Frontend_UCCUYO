@@ -1,0 +1,38 @@
+# Dependencias de Composer
+vendor/
+
+# Archivos de entorno y credenciales (Critico que no se suban)
+.env
+.env.local
+.env.backup
+.env.production
+.env.testing
+
+# Archivos de configuracion local de testing
+phpunit.xml
+
+# Logs y reportes de errores
+*.log
+/log/
+/logs/
+
+# Carpetas de cache temporal
+cache/
+tmp/
+temp/
+
+# Caché de resultados de PHPUnit
+.phpunit.result.cache
+
+# Bases de datos locales (SQLite, etc)
+*.sqlite
+*.sqlite3
+*.db
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Entornos de desarrollo locales (IDEs)
+.vscode/
+.idea/
