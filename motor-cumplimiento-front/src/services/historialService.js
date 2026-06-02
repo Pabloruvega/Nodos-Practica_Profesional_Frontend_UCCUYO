@@ -13,7 +13,7 @@ export function agregarBusqueda(query, categoria = 'General') {
     categoria,
     fecha: new Date().toISOString(),
   };
-  const actualizado = [nueva, ...historial].slice(0, 50); // máximo 50
+  const actualizado = [nueva, ...historial].slice(0, 50);
   localStorage.setItem(HISTORIAL_KEY, JSON.stringify(actualizado));
   return actualizado;
 }
