@@ -205,7 +205,7 @@ export default function FormularioEvaluacion({ onResultado }) {
           value={form.nombre}
           onChange={(e) => setForm((prev) => ({ ...prev, nombre: e.target.value }))}
           placeholder="Ej: Minera Andina S.A."
-          className="bg-zinc-900 border-zinc-800 text-zinc-100 text-base focus:border-zinc-500"
+          className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 dark:focus:border-zinc-500"
         />
       </div>
 
@@ -302,7 +302,7 @@ export default function FormularioEvaluacion({ onResultado }) {
         <Button
           variant="outline"
           onClick={() => setForm(FORM_EJEMPLO)}
-          className="border-zinc-700 text-zinc-400 hover:text-zinc-100"
+          className="bg-white border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
         >
           ⚡ Cargar ejemplo
         </Button>

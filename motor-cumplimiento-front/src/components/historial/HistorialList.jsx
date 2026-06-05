@@ -57,8 +57,8 @@ export default function HistorialList({ onRelanzar }) {
             onClick={() => setCategoriaActiva(cat)}
             className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-150
               ${categoriaActiva === cat
-                ? 'bg-zinc-900 text-zinc-100 border-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-100'
-                : 'bg-transparent text-zinc-500 border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+                ? 'bg-black text-white border-black'
+                : 'bg-white text-zinc-600 border-zinc-300 hover:border-zinc-400 hover:text-zinc-900'
               }`}
           >
             {cat}
