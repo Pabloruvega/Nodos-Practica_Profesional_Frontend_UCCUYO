@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.dafont.com)"
+      "WebFetch(domain:www.dafont.com)",
+      "Bash(Get-ChildItem -Path . -Force)",
+      "Bash(Select-Object Name)"
     ]
   }
 }
