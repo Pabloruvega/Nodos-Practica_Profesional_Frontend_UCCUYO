@@ -12,10 +12,10 @@ const estadoBadge = {
 };
 
 const estadoLabel = {
-  CUMPLE:        '✔ Cumple',
-  NO_CUMPLE:     '✖ No Cumple',
-  POR_VENCER:    '⚠ Por Vencer',
-  DATO_FALTANTE: '— Sin datos',
+  CUMPLE:        'Cumple',
+  NO_CUMPLE:     'No Cumple',
+  POR_VENCER:    'Por Vencer',
+  DATO_FALTANTE: 'Sin datos',
 };
 
 export default function HistorialCard({ item, onEliminar, onRelanzar }) {

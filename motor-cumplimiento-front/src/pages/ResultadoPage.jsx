@@ -74,7 +74,7 @@ export default function ResultadoPage() {
           Estado general
         </p>
         <p className={`text-2xl font-bold ${estiloGeneral.texto}`}>
-          {cumpleGeneral ? '✔ CUMPLE' : '✖ NO CUMPLE'}
+          {cumpleGeneral ? 'CUMPLE' : 'NO CUMPLE'}
         </p>
         <p className="text-sm text-muted-foreground mt-2">
           {resultado.requisitos_cumplidos} de 5 requisitos cumplidos

@@ -181,7 +181,7 @@ export default function FormularioEvaluacion({ onResultado }) {
 
     try {
       const resultado = await evaluarEmpresa(form);
-      toast.success(`Evaluación completada — ${resultado.estado_general === "CUMPLE" ? "✔ Cumple" : "✖ No Cumple"}`);
+      toast.success(`Evaluación completada — ${resultado.estado_general === "CUMPLE" ? "Cumple" : "No Cumple"}`);
       onResultado(resultado);
     } catch (err) {
       setError(err.message);
@@ -239,7 +239,7 @@ export default function FormularioEvaluacion({ onResultado }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* REQ-001 */}
-        <SeccionRequisito emoji="🛡️" titulo="REQ-001 · Seguro de Accidentes del Trabajo">
+        <SeccionRequisito emoji="" titulo="REQ-001 · Seguro de Accidentes del Trabajo">
           <Campo label="N° Póliza"              value={form.seguro_accidentes.numero_poliza}                  onChange={set("seguro_accidentes", "numero_poliza")} />
           <Campo label="Aseguradora"            value={form.seguro_accidentes.aseguradora}                    onChange={set("seguro_accidentes", "aseguradora")} />
           <Campo label="Fecha Inicio"           value={form.seguro_accidentes.fecha_inicio}                   onChange={set("seguro_accidentes", "fecha_inicio")} type="date" />
@@ -248,7 +248,7 @@ export default function FormularioEvaluacion({ onResultado }) {
         </SeccionRequisito>
 
         {/* REQ-002 */}
-        <SeccionRequisito emoji="📋" titulo="REQ-002 · Registro de Proveedor Minero">
+        <SeccionRequisito emoji="" titulo="REQ-002 · Registro de Proveedor Minero">
           <Campo label="N° Registro"          value={form.registro_proveedor.numero_registro}       onChange={set("registro_proveedor", "numero_registro")} />
           <Campo label="Entidad Registradora" value={form.registro_proveedor.entidad_registradora}  onChange={set("registro_proveedor", "entidad_registradora")} />
           <Campo label="Fecha Inscripción"    value={form.registro_proveedor.fecha_inscripcion}     onChange={set("registro_proveedor", "fecha_inscripcion")} type="date" />
@@ -266,7 +266,7 @@ export default function FormularioEvaluacion({ onResultado }) {
         </SeccionRequisito>
 
         {/* REQ-003 */}
-        <SeccionRequisito emoji="✅" titulo="REQ-003 · Certificado de Antecedentes de Seguridad">
+        <SeccionRequisito emoji="" titulo="REQ-003 · Certificado de Antecedentes de Seguridad">
           <Campo label="N° Certificado"  value={form.certificado_seguridad.numero_certificado}    onChange={set("certificado_seguridad", "numero_certificado")} />
           <Campo label="Entidad Emisora" value={form.certificado_seguridad.entidad_emisora}        onChange={set("certificado_seguridad", "entidad_emisora")} />
           <CampoSelect
@@ -285,7 +285,7 @@ export default function FormularioEvaluacion({ onResultado }) {
         </SeccionRequisito>
 
         {/* REQ-004 */}
-        <SeccionRequisito emoji="👷" titulo="REQ-004 · Acreditación de Competencias del Personal">
+        <SeccionRequisito emoji="" titulo="REQ-004 · Acreditación de Competencias del Personal">
           <Campo label="Total Trabajadores"         value={form.acreditacion_personal.total_trabajadores}         onChange={set("acreditacion_personal", "total_trabajadores")} type="number" />
           <Campo label="Trabajadores Certificados"  value={form.acreditacion_personal.trabajadores_certificados}  onChange={set("acreditacion_personal", "trabajadores_certificados")} type="number" />
           <Campo label="% Cobertura"                value={form.acreditacion_personal.porcentaje_cobertura}       onChange={set("acreditacion_personal", "porcentaje_cobertura")} type="number" />
@@ -296,7 +296,7 @@ export default function FormularioEvaluacion({ onResultado }) {
         {/* REQ-005 — centrada */}
         <div className="col-span-2 flex justify-center">
           <div className="w-[calc(50%-8px)]">
-            <SeccionRequisito emoji="🚨" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos">
+            <SeccionRequisito emoji="" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos">
               <CampoSelect
                 label="Tiene Plan"
                 value={form.plan_emergencia.tiene_plan}
@@ -319,7 +319,7 @@ export default function FormularioEvaluacion({ onResultado }) {
       {/* Error */}
       {error && (
         <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg px-4 py-3 text-sm">
-          ⚠️ {error}
+           {error}
         </div>
       )}
 
@@ -333,7 +333,7 @@ export default function FormularioEvaluacion({ onResultado }) {
           }}
           className="border-border text-muted-foreground hover:text-foreground"
         >
-          ⚡ Cargar ejemplo
+           Cargar ejemplo
         </Button>
 
         <Button

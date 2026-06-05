@@ -15,10 +15,10 @@ export default function HistorialList({ onRelanzar }) {
 
   const categoriaLabel = {
     Todos:         'Todos',
-    CUMPLE:        '✔ Cumple',
-    NO_CUMPLE:     '✖ No Cumple',
-    POR_VENCER:    '⚠ Por Vencer',
-    DATO_FALTANTE: '— Sin datos',
+    CUMPLE:        'Cumple',
+    NO_CUMPLE:     'No Cumple',
+    POR_VENCER:    'Por Vencer',
+    DATO_FALTANTE: 'Sin datos',
   };
 
   const filtrado = historial.filter((h) => {

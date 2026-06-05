@@ -15,8 +15,6 @@ export default function NotFoundPage() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <span className="text-6xl mb-4">⛏️</span>
-
       <h1 className="text-6xl font-bold text-primary mb-2">404</h1>
 
       <p className="text-lg font-semibold text-foreground mb-1">

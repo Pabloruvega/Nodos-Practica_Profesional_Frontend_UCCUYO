@@ -28,13 +28,13 @@ export default function AppSidebar() {
     {
       label: "Evaluación",
       path: "/",
-      icon: "⛏️",
+      icon: null,
       badge: null,
     },
     {
       label: "Historial",
       path: "/historial",
-      icon: "📋",
+      icon: null,
       badge: cantidadHistorial > 0 ? cantidadHistorial : null,
     },
   ];
@@ -73,7 +73,7 @@ export default function AppSidebar() {
                     onClick={() => navigate(item.path)}
                     className="cursor-pointer"
                   >
-                    <span>{item.icon}</span>
+                    {item.icon && <span>{item.icon}</span>}
                     <span>{item.label}</span>
                   </SidebarMenuButton>
                   {item.badge && (

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
  * Componente reutilizable que envuelve cada sección del formulario.
  *
  * Uso:
- *   <SeccionRequisito emoji="🛡️" titulo="REQ-001 · Seguro de Accidentes">
+ *   <SeccionRequisito emoji="" titulo="REQ-001 · Seguro de Accidentes">
  *     <Campo ... />
  *     <Campo ... />
  *   </SeccionRequisito>
