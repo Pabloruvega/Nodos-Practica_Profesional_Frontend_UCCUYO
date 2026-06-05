@@ -2,11 +2,7 @@ import { useState } from 'react';
 import HistorialCard from './HistorialCard';
 import { useHistorial } from '../../hooks/useHistorial';
 
-/**
- * Lista del historial con filtros por estado de cumplimiento.
- * Los filtros reflejan los estados reales del backend.
- */
-export default function HistorialList({ onRelanzar }) {
+export default function HistorialList({ onVerDetalle }) {
   const { historial, eliminar, limpiar } = useHistorial();
   const [filtro, setFiltro] = useState('');
   const [categoriaActiva, setCategoriaActiva] = useState('Todos');
@@ -15,10 +11,10 @@ export default function HistorialList({ onRelanzar }) {
 
   const categoriaLabel = {
     Todos:         'Todos',
-    CUMPLE:        'Cumple',
-    NO_CUMPLE:     'No Cumple',
-    POR_VENCER:    'Por Vencer',
-    DATO_FALTANTE: 'Sin datos',
+    CUMPLE:        '✔ Cumple',
+    NO_CUMPLE:     '✖ No Cumple',
+    POR_VENCER:    '⚠ Por Vencer',
+    DATO_FALTANTE: '— Sin datos',
   };
 
   const filtrado = historial.filter((h) => {
@@ -57,7 +53,7 @@ export default function HistorialList({ onRelanzar }) {
           placeholder="Filtrar por empresa..."
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
-          className="w-full pl-9 pr-4 py-2 text-sm border border-border rounded-lg bg-card text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+          className="w-full pl-9 pr-4 py-2 text-sm border border-border rounded-lg bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
         />
       </div>
 
@@ -93,7 +89,7 @@ export default function HistorialList({ onRelanzar }) {
               key={item.id}
               item={item}
               onEliminar={eliminar}
-              onRelanzar={onRelanzar}
+              onVerDetalle={onVerDetalle}
             />
           ))}
         </div>

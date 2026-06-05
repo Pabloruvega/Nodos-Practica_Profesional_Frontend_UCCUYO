@@ -1,11 +1,12 @@
-import HistorialList from '../components/historial/HistorialList';
 import { useNavigate } from 'react-router-dom';
+import HistorialList from '../components/historial/HistorialList';
 
 export default function HistorialPage() {
   const navigate = useNavigate();
 
-  const handleRelanzar = (query) => {
-    navigate(`/resultados?q=${encodeURIComponent(query)}`);
+  // Al hacer click en el ojo, navega a /resultado con el resultado guardado
+  const handleVerDetalle = (resultado) => {
+    navigate('/resultado', { state: { resultado } });
   };
 
   return (
@@ -18,7 +19,7 @@ export default function HistorialPage() {
           Evaluaciones recientes guardadas localmente.
         </p>
       </div>
-      <HistorialList onRelanzar={handleRelanzar} />
+      <HistorialList onVerDetalle={handleVerDetalle} />
     </div>
   );
 }

@@ -2,22 +2,12 @@ import { useNavigate } from "react-router-dom";
 import FormularioEvaluacion from "@/components/evaluacion/FormularioEvaluacion";
 import { agregarBusqueda } from "@/services/historialService";
 
-/**
- * Página principal de evaluación.
- *
- * Flujo:
- *   1. Muestra el formulario
- *   2. El formulario llama al backend y devuelve el resultado via onResultado
- *   3. Esta página guarda el resultado en historialService via agregarBusqueda
- *   4. Redirige a /resultado pasando los datos via state de React Router
- */
 export default function EvaluacionPage() {
   const navigate = useNavigate();
 
   const handleResultado = (resultado) => {
-    // Guardamos el nombre de la empresa como query y el estado general como categoría
-    agregarBusqueda(resultado.empresa, resultado.estado_general);
-
+    // Ahora pasamos el resultado completo al historial
+    agregarBusqueda(resultado.empresa, resultado.estado_general, resultado);
     navigate("/resultado", { state: { resultado } });
   };
 
@@ -31,7 +21,6 @@ export default function EvaluacionPage() {
           Completá los datos de la empresa para evaluar los 5 requisitos normativos.
         </p>
       </div>
-
       <FormularioEvaluacion onResultado={handleResultado} />
     </div>
   );

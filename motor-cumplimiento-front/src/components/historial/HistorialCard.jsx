@@ -1,7 +1,6 @@
 /**
  * Tarjeta individual del historial.
- * Muestra el nombre de la empresa, el estado de cumplimiento y la fecha.
- * Los badges responden al estado real del backend: CUMPLE / NO_CUMPLE.
+ * Ahora incluye botón para ver el detalle completo de la evaluación.
  */
 
 const estadoBadge = {
@@ -12,13 +11,13 @@ const estadoBadge = {
 };
 
 const estadoLabel = {
-  CUMPLE:        'Cumple',
-  NO_CUMPLE:     'No Cumple',
-  POR_VENCER:    'Por Vencer',
-  DATO_FALTANTE: 'Sin datos',
+  CUMPLE:        '✔ Cumple',
+  NO_CUMPLE:     '✖ No Cumple',
+  POR_VENCER:    '⚠ Por Vencer',
+  DATO_FALTANTE: '— Sin datos',
 };
 
-export default function HistorialCard({ item, onEliminar, onRelanzar }) {
+export default function HistorialCard({ item, onEliminar, onVerDetalle }) {
   const fecha = new Date(item.fecha).toLocaleString('es-AR', {
     day: '2-digit',
     month: '2-digit',
@@ -29,6 +28,7 @@ export default function HistorialCard({ item, onEliminar, onRelanzar }) {
 
   const badgeClass = estadoBadge[item.categoria] ?? estadoBadge.DATO_FALTANTE;
   const label = estadoLabel[item.categoria] ?? item.categoria;
+  const tieneDetalle = !!item.resultado;
 
   return (
     <div className="flex items-center justify-between gap-4 px-4 py-3 bg-card border border-border rounded-lg hover:border-ring transition-all duration-150">
@@ -48,15 +48,22 @@ export default function HistorialCard({ item, onEliminar, onRelanzar }) {
 
       {/* Acciones */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        <button
-          onClick={() => onRelanzar(item.query)}
-          title="Buscar de nuevo"
-          className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-accent transition-colors duration-150"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
-          </svg>
-        </button>
+
+        {/* Ver detalle — solo si tiene resultado guardado */}
+        {tieneDetalle && (
+          <button
+            onClick={() => onVerDetalle(item.resultado)}
+            title="Ver detalle"
+            className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-accent transition-colors duration-150"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </button>
+        )}
+
+        {/* Eliminar */}
         <button
           onClick={() => onEliminar(item.id)}
           title="Eliminar"

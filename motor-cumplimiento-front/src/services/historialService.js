@@ -5,13 +5,18 @@ export function getHistorial() {
   return data ? JSON.parse(data) : [];
 }
 
-export function agregarBusqueda(query, categoria = 'General') {
+/**
+ * Guarda una evaluación completa en el historial.
+ * Ahora incluye el resultado completo del backend para poder ver el detalle.
+ */
+export function agregarBusqueda(query, categoria = 'General', resultado = null) {
   const historial = getHistorial();
   const nueva = {
     id: Date.now(),
     query,
     categoria,
     fecha: new Date().toISOString(),
+    resultado, // resultado completo del backend
   };
   const actualizado = [nueva, ...historial].slice(0, 50);
   localStorage.setItem(HISTORIAL_KEY, JSON.stringify(actualizado));
