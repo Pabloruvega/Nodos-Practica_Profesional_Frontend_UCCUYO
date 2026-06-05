@@ -209,77 +209,86 @@ export default function FormularioEvaluacion({ onResultado }) {
         />
       </div>
 
-      {/* REQ-001 */}
-      <SeccionRequisito emoji="🛡️" titulo="REQ-001 · Seguro de Accidentes del Trabajo">
-        <Campo label="N° Póliza"        value={form.seguro_accidentes.numero_poliza}                 onChange={set("seguro_accidentes", "numero_poliza")} />
-        <Campo label="Aseguradora"      value={form.seguro_accidentes.aseguradora}                   onChange={set("seguro_accidentes", "aseguradora")} />
-        <Campo label="Fecha Inicio"     value={form.seguro_accidentes.fecha_inicio}                  onChange={set("seguro_accidentes", "fecha_inicio")} type="date" />
-        <Campo label="Fecha Vencimiento" value={form.seguro_accidentes.fecha_vencimiento}            onChange={set("seguro_accidentes", "fecha_vencimiento")} type="date" />
-        <Campo label="Trabajadores Cubiertos" value={form.seguro_accidentes.numero_trabajadores_cubiertos} onChange={set("seguro_accidentes", "numero_trabajadores_cubiertos")} type="number" />
-      </SeccionRequisito>
+      {/* Secciones REQ en grilla 2 columnas */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      {/* REQ-002 */}
-      <SeccionRequisito emoji="📋" titulo="REQ-002 · Registro de Proveedor Minero">
-        <Campo label="N° Registro"          value={form.registro_proveedor.numero_registro}      onChange={set("registro_proveedor", "numero_registro")} />
-        <Campo label="Entidad Registradora" value={form.registro_proveedor.entidad_registradora} onChange={set("registro_proveedor", "entidad_registradora")} />
-        <Campo label="Fecha Inscripción"    value={form.registro_proveedor.fecha_inscripcion}    onChange={set("registro_proveedor", "fecha_inscripcion")} type="date" />
-        <CampoSelect
-          label="Estado Registro"
-          value={form.registro_proveedor.estado_registro}
-          onChange={set("registro_proveedor", "estado_registro")}
-          opciones={[
-            { value: "activo",   label: "Activo" },
-            { value: "vigente",  label: "Vigente" },
-            { value: "inactivo", label: "Inactivo" },
-          ]}
-        />
-        <Campo label="Fecha Vencimiento" value={form.registro_proveedor.fecha_vencimiento} onChange={set("registro_proveedor", "fecha_vencimiento")} type="date" />
-      </SeccionRequisito>
+        {/* REQ-001 */}
+        <SeccionRequisito emoji="🛡️" titulo="REQ-001 · Seguro de Accidentes del Trabajo">
+          <Campo label="N° Póliza"        value={form.seguro_accidentes.numero_poliza}                 onChange={set("seguro_accidentes", "numero_poliza")} />
+          <Campo label="Aseguradora"      value={form.seguro_accidentes.aseguradora}                   onChange={set("seguro_accidentes", "aseguradora")} />
+          <Campo label="Fecha Inicio"     value={form.seguro_accidentes.fecha_inicio}                  onChange={set("seguro_accidentes", "fecha_inicio")} type="date" />
+          <Campo label="Fecha Vencimiento" value={form.seguro_accidentes.fecha_vencimiento}            onChange={set("seguro_accidentes", "fecha_vencimiento")} type="date" />
+          <Campo label="Trabajadores Cubiertos" value={form.seguro_accidentes.numero_trabajadores_cubiertos} onChange={set("seguro_accidentes", "numero_trabajadores_cubiertos")} type="number" />
+        </SeccionRequisito>
 
-      {/* REQ-003 */}
-      <SeccionRequisito emoji="✅" titulo="REQ-003 · Certificado de Antecedentes de Seguridad">
-        <Campo label="N° Certificado"   value={form.certificado_seguridad.numero_certificado}     onChange={set("certificado_seguridad", "numero_certificado")} />
-        <Campo label="Entidad Emisora"  value={form.certificado_seguridad.entidad_emisora}         onChange={set("certificado_seguridad", "entidad_emisora")} />
-        <CampoSelect
-          label="Resultado"
-          value={form.certificado_seguridad.resultado}
-          onChange={set("certificado_seguridad", "resultado")}
-          opciones={[
-            { value: "aprobado",           label: "Aprobado" },
-            { value: "sin_observaciones",  label: "Sin Observaciones" },
-            { value: "con_observaciones",  label: "Con Observaciones" },
-          ]}
-        />
-        <Campo label="Fecha Emisión"      value={form.certificado_seguridad.fecha_emision}      onChange={set("certificado_seguridad", "fecha_emision")} type="date" />
-        <Campo label="Fecha Vencimiento"  value={form.certificado_seguridad.fecha_vencimiento}  onChange={set("certificado_seguridad", "fecha_vencimiento")} type="date" />
-        <Campo label="Período Evaluado (meses)" value={form.certificado_seguridad.periodo_evaluado_meses} onChange={set("certificado_seguridad", "periodo_evaluado_meses")} type="number" />
-      </SeccionRequisito>
+        {/* REQ-002 */}
+        <SeccionRequisito emoji="📋" titulo="REQ-002 · Registro de Proveedor Minero">
+          <Campo label="N° Registro"          value={form.registro_proveedor.numero_registro}      onChange={set("registro_proveedor", "numero_registro")} />
+          <Campo label="Entidad Registradora" value={form.registro_proveedor.entidad_registradora} onChange={set("registro_proveedor", "entidad_registradora")} />
+          <Campo label="Fecha Inscripción"    value={form.registro_proveedor.fecha_inscripcion}    onChange={set("registro_proveedor", "fecha_inscripcion")} type="date" />
+          <CampoSelect
+            label="Estado Registro"
+            value={form.registro_proveedor.estado_registro}
+            onChange={set("registro_proveedor", "estado_registro")}
+            opciones={[
+              { value: "activo",   label: "Activo" },
+              { value: "vigente",  label: "Vigente" },
+              { value: "inactivo", label: "Inactivo" },
+            ]}
+          />
+          <Campo label="Fecha Vencimiento" value={form.registro_proveedor.fecha_vencimiento} onChange={set("registro_proveedor", "fecha_vencimiento")} type="date" />
+        </SeccionRequisito>
 
-      {/* REQ-004 */}
-      <SeccionRequisito emoji="👷" titulo="REQ-004 · Acreditación de Competencias del Personal">
-        <Campo label="Total Trabajadores"        value={form.acreditacion_personal.total_trabajadores}         onChange={set("acreditacion_personal", "total_trabajadores")} type="number" />
-        <Campo label="Trabajadores Certificados" value={form.acreditacion_personal.trabajadores_certificados}  onChange={set("acreditacion_personal", "trabajadores_certificados")} type="number" />
-        <Campo label="% Cobertura"               value={form.acreditacion_personal.porcentaje_cobertura}       onChange={set("acreditacion_personal", "porcentaje_cobertura")} type="number" />
-        <Campo label="Fecha Última Actualización" value={form.acreditacion_personal.fecha_ultima_actualizacion} onChange={set("acreditacion_personal", "fecha_ultima_actualizacion")} type="date" />
-        <Campo label="Organismo Certificador"    value={form.acreditacion_personal.organismo_certificador}     onChange={set("acreditacion_personal", "organismo_certificador")} />
-      </SeccionRequisito>
+        {/* REQ-003 */}
+        <SeccionRequisito emoji="✅" titulo="REQ-003 · Certificado de Antecedentes de Seguridad">
+          <Campo label="N° Certificado"   value={form.certificado_seguridad.numero_certificado}     onChange={set("certificado_seguridad", "numero_certificado")} />
+          <Campo label="Entidad Emisora"  value={form.certificado_seguridad.entidad_emisora}         onChange={set("certificado_seguridad", "entidad_emisora")} />
+          <CampoSelect
+            label="Resultado"
+            value={form.certificado_seguridad.resultado}
+            onChange={set("certificado_seguridad", "resultado")}
+            opciones={[
+              { value: "aprobado",           label: "Aprobado" },
+              { value: "sin_observaciones",  label: "Sin Observaciones" },
+              { value: "con_observaciones",  label: "Con Observaciones" },
+            ]}
+          />
+          <Campo label="Fecha Emisión"      value={form.certificado_seguridad.fecha_emision}      onChange={set("certificado_seguridad", "fecha_emision")} type="date" />
+          <Campo label="Fecha Vencimiento"  value={form.certificado_seguridad.fecha_vencimiento}  onChange={set("certificado_seguridad", "fecha_vencimiento")} type="date" />
+          <Campo label="Período Evaluado (meses)" value={form.certificado_seguridad.periodo_evaluado_meses} onChange={set("certificado_seguridad", "periodo_evaluado_meses")} type="number" />
+        </SeccionRequisito>
 
-      {/* REQ-005 */}
-      <SeccionRequisito emoji="🚨" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos">
-        <CampoSelect
-          label="Tiene Plan"
-          value={form.plan_emergencia.tiene_plan}
-          onChange={set("plan_emergencia", "tiene_plan")}
-          opciones={[
-            { value: "true",  label: "Sí" },
-            { value: "false", label: "No" },
-          ]}
-        />
-        <Campo label="Fecha Última Revisión"     value={form.plan_emergencia.fecha_ultima_revision}      onChange={set("plan_emergencia", "fecha_ultima_revision")} type="date" />
-        <Campo label="Aprobado Por"              value={form.plan_emergencia.aprobado_por}               onChange={set("plan_emergencia", "aprobado_por")} />
-        <Campo label="Versión"                   value={form.plan_emergencia.version}                    onChange={set("plan_emergencia", "version")} />
-        <Campo label="Simulacros Realizados (año)" value={form.plan_emergencia.simulacros_realizados_anio} onChange={set("plan_emergencia", "simulacros_realizados_anio")} type="number" />
-      </SeccionRequisito>
+        {/* REQ-004 */}
+        <SeccionRequisito emoji="👷" titulo="REQ-004 · Acreditación de Competencias del Personal">
+          <Campo label="Total Trabajadores"        value={form.acreditacion_personal.total_trabajadores}         onChange={set("acreditacion_personal", "total_trabajadores")} type="number" />
+          <Campo label="Trabajadores Certificados" value={form.acreditacion_personal.trabajadores_certificados}  onChange={set("acreditacion_personal", "trabajadores_certificados")} type="number" />
+          <Campo label="% Cobertura"               value={form.acreditacion_personal.porcentaje_cobertura}       onChange={set("acreditacion_personal", "porcentaje_cobertura")} type="number" />
+          <Campo label="Fecha Última Actualización" value={form.acreditacion_personal.fecha_ultima_actualizacion} onChange={set("acreditacion_personal", "fecha_ultima_actualizacion")} type="date" />
+          <Campo label="Organismo Certificador"    value={form.acreditacion_personal.organismo_certificador}     onChange={set("acreditacion_personal", "organismo_certificador")} />
+        </SeccionRequisito>
+
+        {/* REQ-005 — centrada en su propia fila */}
+        <div className="col-span-2 flex justify-center">
+          <div className="w-[calc(50%-8px)]">
+            <SeccionRequisito emoji="🚨" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos">
+              <CampoSelect
+                label="Tiene Plan"
+                value={form.plan_emergencia.tiene_plan}
+                onChange={set("plan_emergencia", "tiene_plan")}
+                opciones={[
+                  { value: "true",  label: "Sí" },
+                  { value: "false", label: "No" },
+                ]}
+              />
+              <Campo label="Fecha Última Revisión"     value={form.plan_emergencia.fecha_ultima_revision}      onChange={set("plan_emergencia", "fecha_ultima_revision")} type="date" />
+              <Campo label="Aprobado Por"              value={form.plan_emergencia.aprobado_por}               onChange={set("plan_emergencia", "aprobado_por")} />
+              <Campo label="Versión"                   value={form.plan_emergencia.version}                    onChange={set("plan_emergencia", "version")} />
+              <Campo label="Simulacros Realizados (año)" value={form.plan_emergencia.simulacros_realizados_anio} onChange={set("plan_emergencia", "simulacros_realizados_anio")} type="number" />
+            </SeccionRequisito>
+          </div>
+        </div>
+
+      </div>
 
       {/* Error */}
       {error && (
