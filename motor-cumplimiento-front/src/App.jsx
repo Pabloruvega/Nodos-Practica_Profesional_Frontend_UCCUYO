@@ -8,7 +8,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <main>
+      <main className="flex-1">
         <Routes>
           <Route path="/" element={<EvaluacionPage />} />
           <Route path="/resultado" element={<ResultadoPage />} />

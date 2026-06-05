@@ -124,7 +124,7 @@ function Campo({ label, value, onChange, type = "text", placeholder = "" }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="bg-zinc-950 border-zinc-800 text-zinc-100 focus:border-zinc-500"
+        className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 dark:focus:border-zinc-500"
       />
     </div>
   );
@@ -140,12 +140,12 @@ function CampoSelect({ label, value, onChange, opciones }) {
         {label}
       </Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-100">
+        <SelectTrigger className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100">
           <SelectValue placeholder="— seleccionar —" />
         </SelectTrigger>
-        <SelectContent className="bg-zinc-900 border-zinc-800">
+        <SelectContent className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
           {opciones.map((op) => (
-            <SelectItem key={op.value} value={op.value} className="text-zinc-100">
+            <SelectItem key={op.value} value={op.value} className="text-zinc-900 dark:text-zinc-100">
               {op.label}
             </SelectItem>
           ))}

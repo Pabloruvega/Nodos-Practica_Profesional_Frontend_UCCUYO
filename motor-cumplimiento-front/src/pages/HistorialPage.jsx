@@ -10,7 +10,13 @@ export default function HistorialPage() {
   };
 
   return (
-    <div className="page historial-page">
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">Historial</h1>
+        <p className="text-sm text-zinc-500 mt-1">
+          Búsquedas recientes guardadas localmente.
+        </p>
+      </div>
       <HistorialList onRelanzar={handleRelanzar} />
     </div>
   );
