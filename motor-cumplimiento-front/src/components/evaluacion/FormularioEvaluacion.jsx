@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import SeccionRequisito from "@/components/evaluacion/SeccionRequisito";
 import { evaluarEmpresa } from "@/services/evaluacionService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -12,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Estado inicial vacío del formulario
 const FORM_INICIAL = {
   nombre: "",
   seguro_accidentes: {
@@ -53,7 +54,6 @@ const FORM_INICIAL = {
   },
 };
 
-// Datos de ejemplo para pruebas rápidas
 const FORM_EJEMPLO = {
   nombre: "Minera Andina S.A.",
   seguro_accidentes: {
@@ -94,29 +94,35 @@ const FORM_EJEMPLO = {
   },
 };
 
-/**
- * Actualiza un campo anidado dentro del estado del formulario.
- * Ejemplo: setField("seguro_accidentes", "numero_poliza", "POL-123")
- */
 function actualizarCampo(form, seccion, campo, valor) {
   return {
     ...form,
-    [seccion]: {
-      ...form[seccion],
-      [campo]: valor,
-    },
+    [seccion]: { ...form[seccion], [campo]: valor },
   };
 }
 
-// ── Subcomponentes internos ──────────────────────────────────────
+// ── Skeleton de una sección ─────────────────────────────────────
+function SeccionSkeleton() {
+  return (
+    <div className="rounded-lg border border-border bg-card p-5 space-y-3">
+      <Skeleton className="h-4 w-48" />
+      <div className="grid grid-cols-2 gap-3">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="space-y-1">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-9 w-full" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-/**
- * Campo de texto o fecha reutilizable dentro de una sección.
- */
+// ── Campo texto/fecha ───────────────────────────────────────────
 function Campo({ label, value, onChange, type = "text", placeholder = "" }) {
   return (
     <div className="space-y-1">
-      <Label className="text-xs text-zinc-500 uppercase tracking-wider">
+      <Label className="text-xs text-muted-foreground uppercase tracking-wider">
         {label}
       </Label>
       <Input
@@ -124,28 +130,26 @@ function Campo({ label, value, onChange, type = "text", placeholder = "" }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 dark:focus:border-zinc-500"
+        className="bg-background border-border text-foreground focus:border-ring"
       />
     </div>
   );
 }
 
-/**
- * Campo de selección reutilizable dentro de una sección.
- */
+// ── Campo select ────────────────────────────────────────────────
 function CampoSelect({ label, value, onChange, opciones }) {
   return (
     <div className="space-y-1">
-      <Label className="text-xs text-zinc-500 uppercase tracking-wider">
+      <Label className="text-xs text-muted-foreground uppercase tracking-wider">
         {label}
       </Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100">
+        <SelectTrigger className="bg-background border-border text-foreground">
           <SelectValue placeholder="— seleccionar —" />
         </SelectTrigger>
-        <SelectContent className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+        <SelectContent className="bg-card border-border">
           {opciones.map((op) => (
-            <SelectItem key={op.value} value={op.value} className="text-zinc-900 dark:text-zinc-100">
+            <SelectItem key={op.value} value={op.value} className="text-foreground">
               {op.label}
             </SelectItem>
           ))}
@@ -155,20 +159,12 @@ function CampoSelect({ label, value, onChange, opciones }) {
   );
 }
 
-// ── Componente principal ─────────────────────────────────────────
-
-/**
- * Formulario completo de evaluación de cumplimiento normativo.
- *
- * Props:
- *   @param {function} onResultado - callback que recibe el resultado del backend
- */
+// ── Componente principal ────────────────────────────────────────
 export default function FormularioEvaluacion({ onResultado }) {
   const [form, setForm] = useState(FORM_INICIAL);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Helpers para actualizar cada sección
   const set = (seccion, campo) => (valor) => {
     setForm((prev) => actualizarCampo(prev, seccion, campo, valor));
   };
@@ -176,6 +172,7 @@ export default function FormularioEvaluacion({ onResultado }) {
   const handleSubmit = async () => {
     if (!form.nombre.trim()) {
       setError("El nombre de la empresa es obligatorio.");
+      toast.error("El nombre de la empresa es obligatorio.");
       return;
     }
 
@@ -184,20 +181,49 @@ export default function FormularioEvaluacion({ onResultado }) {
 
     try {
       const resultado = await evaluarEmpresa(form);
+      toast.success(`Evaluación completada — ${resultado.estado_general === "CUMPLE" ? "✔ Cumple" : "✖ No Cumple"}`);
       onResultado(resultado);
     } catch (err) {
       setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+  // ── Skeleton mientras carga ─────────────────────────────────
+  if (loading) {
+    return (
+      <div className="space-y-4 animate-pulse">
+        <div className="space-y-1">
+          <Skeleton className="h-3 w-40" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <SeccionSkeleton />
+          <SeccionSkeleton />
+          <SeccionSkeleton />
+          <SeccionSkeleton />
+          <div className="col-span-2 flex justify-center">
+            <div className="w-[calc(50%-8px)]">
+              <SeccionSkeleton />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between items-center pt-2">
+          <Skeleton className="h-9 w-32" />
+          <Skeleton className="h-9 w-40" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
 
       {/* Nombre empresa */}
       <div className="space-y-1">
-        <Label className="text-xs text-zinc-500 uppercase tracking-wider">
+        <Label className="text-xs text-muted-foreground uppercase tracking-wider">
           Nombre de la empresa *
         </Label>
         <Input
@@ -205,27 +231,27 @@ export default function FormularioEvaluacion({ onResultado }) {
           value={form.nombre}
           onChange={(e) => setForm((prev) => ({ ...prev, nombre: e.target.value }))}
           placeholder="Ej: Minera Andina S.A."
-          className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 dark:focus:border-zinc-500"
+          className="bg-background border-border text-foreground focus:border-ring text-base"
         />
       </div>
 
-      {/* Secciones REQ en grilla 2 columnas */}
+      {/* Secciones en grilla 2 columnas */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* REQ-001 */}
         <SeccionRequisito emoji="🛡️" titulo="REQ-001 · Seguro de Accidentes del Trabajo">
-          <Campo label="N° Póliza"        value={form.seguro_accidentes.numero_poliza}                 onChange={set("seguro_accidentes", "numero_poliza")} />
-          <Campo label="Aseguradora"      value={form.seguro_accidentes.aseguradora}                   onChange={set("seguro_accidentes", "aseguradora")} />
-          <Campo label="Fecha Inicio"     value={form.seguro_accidentes.fecha_inicio}                  onChange={set("seguro_accidentes", "fecha_inicio")} type="date" />
-          <Campo label="Fecha Vencimiento" value={form.seguro_accidentes.fecha_vencimiento}            onChange={set("seguro_accidentes", "fecha_vencimiento")} type="date" />
-          <Campo label="Trabajadores Cubiertos" value={form.seguro_accidentes.numero_trabajadores_cubiertos} onChange={set("seguro_accidentes", "numero_trabajadores_cubiertos")} type="number" />
+          <Campo label="N° Póliza"              value={form.seguro_accidentes.numero_poliza}                  onChange={set("seguro_accidentes", "numero_poliza")} />
+          <Campo label="Aseguradora"            value={form.seguro_accidentes.aseguradora}                    onChange={set("seguro_accidentes", "aseguradora")} />
+          <Campo label="Fecha Inicio"           value={form.seguro_accidentes.fecha_inicio}                   onChange={set("seguro_accidentes", "fecha_inicio")} type="date" />
+          <Campo label="Fecha Vencimiento"      value={form.seguro_accidentes.fecha_vencimiento}              onChange={set("seguro_accidentes", "fecha_vencimiento")} type="date" />
+          <Campo label="Trabajadores Cubiertos" value={form.seguro_accidentes.numero_trabajadores_cubiertos}  onChange={set("seguro_accidentes", "numero_trabajadores_cubiertos")} type="number" />
         </SeccionRequisito>
 
         {/* REQ-002 */}
         <SeccionRequisito emoji="📋" titulo="REQ-002 · Registro de Proveedor Minero">
-          <Campo label="N° Registro"          value={form.registro_proveedor.numero_registro}      onChange={set("registro_proveedor", "numero_registro")} />
-          <Campo label="Entidad Registradora" value={form.registro_proveedor.entidad_registradora} onChange={set("registro_proveedor", "entidad_registradora")} />
-          <Campo label="Fecha Inscripción"    value={form.registro_proveedor.fecha_inscripcion}    onChange={set("registro_proveedor", "fecha_inscripcion")} type="date" />
+          <Campo label="N° Registro"          value={form.registro_proveedor.numero_registro}       onChange={set("registro_proveedor", "numero_registro")} />
+          <Campo label="Entidad Registradora" value={form.registro_proveedor.entidad_registradora}  onChange={set("registro_proveedor", "entidad_registradora")} />
+          <Campo label="Fecha Inscripción"    value={form.registro_proveedor.fecha_inscripcion}     onChange={set("registro_proveedor", "fecha_inscripcion")} type="date" />
           <CampoSelect
             label="Estado Registro"
             value={form.registro_proveedor.estado_registro}
@@ -241,33 +267,33 @@ export default function FormularioEvaluacion({ onResultado }) {
 
         {/* REQ-003 */}
         <SeccionRequisito emoji="✅" titulo="REQ-003 · Certificado de Antecedentes de Seguridad">
-          <Campo label="N° Certificado"   value={form.certificado_seguridad.numero_certificado}     onChange={set("certificado_seguridad", "numero_certificado")} />
-          <Campo label="Entidad Emisora"  value={form.certificado_seguridad.entidad_emisora}         onChange={set("certificado_seguridad", "entidad_emisora")} />
+          <Campo label="N° Certificado"  value={form.certificado_seguridad.numero_certificado}    onChange={set("certificado_seguridad", "numero_certificado")} />
+          <Campo label="Entidad Emisora" value={form.certificado_seguridad.entidad_emisora}        onChange={set("certificado_seguridad", "entidad_emisora")} />
           <CampoSelect
             label="Resultado"
             value={form.certificado_seguridad.resultado}
             onChange={set("certificado_seguridad", "resultado")}
             opciones={[
-              { value: "aprobado",           label: "Aprobado" },
-              { value: "sin_observaciones",  label: "Sin Observaciones" },
-              { value: "con_observaciones",  label: "Con Observaciones" },
+              { value: "aprobado",          label: "Aprobado" },
+              { value: "sin_observaciones", label: "Sin Observaciones" },
+              { value: "con_observaciones", label: "Con Observaciones" },
             ]}
           />
-          <Campo label="Fecha Emisión"      value={form.certificado_seguridad.fecha_emision}      onChange={set("certificado_seguridad", "fecha_emision")} type="date" />
-          <Campo label="Fecha Vencimiento"  value={form.certificado_seguridad.fecha_vencimiento}  onChange={set("certificado_seguridad", "fecha_vencimiento")} type="date" />
+          <Campo label="Fecha Emisión"           value={form.certificado_seguridad.fecha_emision}           onChange={set("certificado_seguridad", "fecha_emision")} type="date" />
+          <Campo label="Fecha Vencimiento"       value={form.certificado_seguridad.fecha_vencimiento}       onChange={set("certificado_seguridad", "fecha_vencimiento")} type="date" />
           <Campo label="Período Evaluado (meses)" value={form.certificado_seguridad.periodo_evaluado_meses} onChange={set("certificado_seguridad", "periodo_evaluado_meses")} type="number" />
         </SeccionRequisito>
 
         {/* REQ-004 */}
         <SeccionRequisito emoji="👷" titulo="REQ-004 · Acreditación de Competencias del Personal">
-          <Campo label="Total Trabajadores"        value={form.acreditacion_personal.total_trabajadores}         onChange={set("acreditacion_personal", "total_trabajadores")} type="number" />
-          <Campo label="Trabajadores Certificados" value={form.acreditacion_personal.trabajadores_certificados}  onChange={set("acreditacion_personal", "trabajadores_certificados")} type="number" />
-          <Campo label="% Cobertura"               value={form.acreditacion_personal.porcentaje_cobertura}       onChange={set("acreditacion_personal", "porcentaje_cobertura")} type="number" />
+          <Campo label="Total Trabajadores"         value={form.acreditacion_personal.total_trabajadores}         onChange={set("acreditacion_personal", "total_trabajadores")} type="number" />
+          <Campo label="Trabajadores Certificados"  value={form.acreditacion_personal.trabajadores_certificados}  onChange={set("acreditacion_personal", "trabajadores_certificados")} type="number" />
+          <Campo label="% Cobertura"                value={form.acreditacion_personal.porcentaje_cobertura}       onChange={set("acreditacion_personal", "porcentaje_cobertura")} type="number" />
           <Campo label="Fecha Última Actualización" value={form.acreditacion_personal.fecha_ultima_actualizacion} onChange={set("acreditacion_personal", "fecha_ultima_actualizacion")} type="date" />
-          <Campo label="Organismo Certificador"    value={form.acreditacion_personal.organismo_certificador}     onChange={set("acreditacion_personal", "organismo_certificador")} />
+          <Campo label="Organismo Certificador"     value={form.acreditacion_personal.organismo_certificador}     onChange={set("acreditacion_personal", "organismo_certificador")} />
         </SeccionRequisito>
 
-        {/* REQ-005 — centrada en su propia fila */}
+        {/* REQ-005 — centrada */}
         <div className="col-span-2 flex justify-center">
           <div className="w-[calc(50%-8px)]">
             <SeccionRequisito emoji="🚨" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos">
@@ -280,9 +306,9 @@ export default function FormularioEvaluacion({ onResultado }) {
                   { value: "false", label: "No" },
                 ]}
               />
-              <Campo label="Fecha Última Revisión"     value={form.plan_emergencia.fecha_ultima_revision}      onChange={set("plan_emergencia", "fecha_ultima_revision")} type="date" />
-              <Campo label="Aprobado Por"              value={form.plan_emergencia.aprobado_por}               onChange={set("plan_emergencia", "aprobado_por")} />
-              <Campo label="Versión"                   value={form.plan_emergencia.version}                    onChange={set("plan_emergencia", "version")} />
+              <Campo label="Fecha Última Revisión"      value={form.plan_emergencia.fecha_ultima_revision}       onChange={set("plan_emergencia", "fecha_ultima_revision")} type="date" />
+              <Campo label="Aprobado Por"               value={form.plan_emergencia.aprobado_por}                onChange={set("plan_emergencia", "aprobado_por")} />
+              <Campo label="Versión"                    value={form.plan_emergencia.version}                     onChange={set("plan_emergencia", "version")} />
               <Campo label="Simulacros Realizados (año)" value={form.plan_emergencia.simulacros_realizados_anio} onChange={set("plan_emergencia", "simulacros_realizados_anio")} type="number" />
             </SeccionRequisito>
           </div>
@@ -292,7 +318,7 @@ export default function FormularioEvaluacion({ onResultado }) {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-950 border border-red-800 text-red-400 rounded-lg px-4 py-3 text-sm">
+        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded-lg px-4 py-3 text-sm">
           ⚠️ {error}
         </div>
       )}
@@ -301,8 +327,11 @@ export default function FormularioEvaluacion({ onResultado }) {
       <div className="flex justify-between items-center pt-2">
         <Button
           variant="outline"
-          onClick={() => setForm(FORM_EJEMPLO)}
-          className="bg-white border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
+          onClick={() => {
+            setForm(FORM_EJEMPLO);
+            toast.info("Ejemplo cargado");
+          }}
+          className="border-border text-muted-foreground hover:text-foreground"
         >
           ⚡ Cargar ejemplo
         </Button>
@@ -310,9 +339,9 @@ export default function FormularioEvaluacion({ onResultado }) {
         <Button
           onClick={handleSubmit}
           disabled={loading}
-          className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold tracking-wide"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold tracking-wide"
         >
-          {loading ? "⏳ Evaluando..." : "Evaluar Empresa →"}
+          Evaluar Empresa →
         </Button>
       </div>
     </div>

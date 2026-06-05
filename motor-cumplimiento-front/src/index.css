@@ -36,9 +36,10 @@
 
 html.dark {
   /* Modo oscuro — marina índigo profunda */
-  --background: 240 25% 8%;         /* azul marino muy oscuro */
+  
+  --background: 220 40% 6%;         /* azul marino muy oscuro */
   --foreground: 240 20% 92%;        /* lavanda blanco */
-  --card: 240 22% 13%;              /* azul marino oscuro */
+  --card: 240 22% 16%;              /* azul marino oscuro */
   --card-foreground: 240 20% 92%;
   --border: 240 18% 20%;            /* borde sutil azul */
   --input: 240 20% 16%;

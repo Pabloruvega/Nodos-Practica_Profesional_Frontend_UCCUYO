@@ -2,6 +2,13 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/layout/AppSidebar";
 import { useTheme } from "@/hooks/useTheme";
 
+/**
+ * Layout principal de la aplicación.
+ * Envuelve todas las páginas con el sidebar y el trigger para abrirlo/cerrarlo.
+ *
+ * Props:
+ *   @param {ReactNode} children - las páginas de la app
+ */
 export default function AppLayout({ children }) {
   const { dark, toggle } = useTheme();
 
@@ -11,11 +18,28 @@ export default function AppLayout({ children }) {
         <AppSidebar />
 
         <div className="flex flex-col flex-1 min-w-0">
+          {/* Barra superior */}
           <header className="flex items-center gap-3 border-b border-border px-4 py-3 bg-card">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-            <span className="text-sm text-muted-foreground">
+
+            <img
+              src="/src/assets/logo.png"
+              alt="Logo Minero"
+              className="w-7 h-7 object-contain mix-blend-multiply dark:mix-blend-screen"
+            />
+
+            <span className="text-sm text-muted-foreground flex-1">
               Motor de Cumplimiento Normativo Minero
             </span>
+
+            {/* Botón modo oscuro/claro */}
+            <button
+              onClick={toggle}
+              title={dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+              className="w-9 h-9 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            >
+              {dark ? "☀️" : "🌙"}
+            </button>
           </header>
 
           {/* Contenido de la página */}
