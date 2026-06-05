@@ -1,15 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
+  darkMode: ['class', 'class'],
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
-      fontFamily: {
-        minecraft: ['MinecraftPE', 'sans-serif'],
-      },
       colors: {
         background:  'hsl(var(--background))',
         foreground:  'hsl(var(--foreground))',
