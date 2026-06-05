@@ -2,9 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'MinecraftPE';
+  src: url('./assets/fonts/MinecraftPE.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   /* Modo claro — azul gris y blanco */
-  --background: 210 20% 96%;        /* gris azulado muy claro */
+  --background: 0 0% 66.7%;         /* #aaaaaa */
   --foreground: 215 25% 15%;        /* azul oscuro casi negro */
   --card: 0 0% 100%;                /* blanco puro */
   --card-foreground: 215 25% 15%;
@@ -58,7 +65,7 @@ body {
   margin: 0;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'MinecraftPE', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
