@@ -41,7 +41,11 @@ export default function AppSidebar() {
       {/* Logo / título */}
       <SidebarHeader className="border-b border-border px-4 py-4">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">⛏</span>
+          <img 
+  src="/src/assets/logo.png" 
+  alt="Logo Minero" 
+  className="w-10 h-10 object-contain"
+/>
           <div>
             <p className="text-sm font-bold text-foreground leading-tight">
               Motor de Cumplimiento
