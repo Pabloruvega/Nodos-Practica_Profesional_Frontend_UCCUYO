@@ -13,7 +13,7 @@
   /* Modo claro — violeta/índigo moderno */
   --background: 240 20% 96%;        /* lavanda muy suave */
   --foreground: 240 30% 10%;        /* azul marino profundo */
-  --card: 0 0% 12%;                /* blanco puro */
+  --card: 0 0% 100%;               /* blanco puro */
   --card-foreground: 240 30% 10%;
   --border: 245 18% 86%;            /* lavanda gris suave */
   --input: 245 15% 91%;
