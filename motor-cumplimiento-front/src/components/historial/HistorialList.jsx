@@ -2,19 +2,40 @@ import { useState } from 'react';
 import HistorialCard from './HistorialCard';
 import { useHistorial } from '../../hooks/useHistorial';
 
+// Empty state ilustrado con SVG inline temático
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
+      <div className="relative">
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="38" className="fill-secondary" />
+          <rect x="22" y="28" width="36" height="28" rx="3" className="fill-border" />
+          <rect x="26" y="33" width="20" height="2.5" rx="1.25" className="fill-muted-foreground opacity-50" />
+          <rect x="26" y="39" width="28" height="2.5" rx="1.25" className="fill-muted-foreground opacity-40" />
+          <rect x="26" y="45" width="16" height="2.5" rx="1.25" className="fill-muted-foreground opacity-30" />
+          <circle cx="54" cy="54" r="10" className="fill-card stroke-border" strokeWidth="1.5" />
+          <path d="M50 54h8M54 50v8" className="stroke-muted-foreground" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </div>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold text-foreground">Sin evaluaciones aún</p>
+        <p className="text-xs text-muted-foreground max-w-xs">
+          Las evaluaciones que realices aparecerán acá. Empezá evaluando una empresa.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function HistorialList({ onVerDetalle }) {
   const { historial, eliminar, limpiar } = useHistorial();
   const [filtro, setFiltro] = useState('');
   const [categoriaActiva, setCategoriaActiva] = useState('Todos');
 
   const categorias = ['Todos', 'CUMPLE', 'NO_CUMPLE', 'POR_VENCER', 'DATO_FALTANTE'];
-
   const categoriaLabel = {
-    Todos:         'Todos',
-    CUMPLE:        '✔ Cumple',
-    NO_CUMPLE:     '✖ No Cumple',
-    POR_VENCER:    '⚠ Por Vencer',
-    DATO_FALTANTE: '— Sin datos',
+    Todos: 'Todos', CUMPLE: '✔ Cumple', NO_CUMPLE: '✖ No Cumple',
+    POR_VENCER: '⚠ Por Vencer', DATO_FALTANTE: '— Sin datos',
   };
 
   const filtrado = historial.filter((h) => {
@@ -30,14 +51,12 @@ export default function HistorialList({ onVerDetalle }) {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-foreground">
           Evaluaciones recientes
-          <span className="ml-2 font-normal text-muted-foreground">
-            ({historial.length})
-          </span>
+          <span className="ml-2 font-normal text-muted-foreground">({historial.length})</span>
         </h2>
         <button
           onClick={limpiar}
           disabled={historial.length === 0}
-          className="text-xs text-danger hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity duration-150"
+          className="text-xs text-danger hover:opacity-80 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
         >
           Limpiar todo
         </button>
@@ -57,7 +76,7 @@ export default function HistorialList({ onVerDetalle }) {
         />
       </div>
 
-      {/* Filtros por estado */}
+      {/* Filtros */}
       <div className="flex flex-wrap gap-2">
         {categorias.map((cat) => (
           <button
@@ -74,13 +93,12 @@ export default function HistorialList({ onVerDetalle }) {
         ))}
       </div>
 
-      {/* Lista */}
-      {filtrado.length === 0 ? (
+      {/* Lista o empty state */}
+      {historial.length === 0 ? (
+        <EmptyState />
+      ) : filtrado.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-muted-foreground gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0H4" />
-          </svg>
-          <span className="text-sm">No hay evaluaciones guardadas.</span>
+          <span className="text-sm">No hay resultados para ese filtro.</span>
         </div>
       ) : (
         <div className="flex flex-col gap-2">

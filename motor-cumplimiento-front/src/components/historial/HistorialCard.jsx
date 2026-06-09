@@ -1,7 +1,9 @@
-/**
- * Tarjeta individual del historial.
- * Ahora incluye botón para ver el detalle completo de la evaluación.
- */
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const estadoBadge = {
   CUMPLE:        'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300',
@@ -19,11 +21,8 @@ const estadoLabel = {
 
 export default function HistorialCard({ item, onEliminar, onVerDetalle }) {
   const fecha = new Date(item.fecha).toLocaleString('es-AR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
   });
 
   const badgeClass = estadoBadge[item.categoria] ?? estadoBadge.DATO_FALTANTE;
@@ -31,49 +30,54 @@ export default function HistorialCard({ item, onEliminar, onVerDetalle }) {
   const tieneDetalle = !!item.resultado;
 
   return (
-    <div className="flex items-center justify-between gap-4 px-4 py-3 bg-card border border-border rounded-lg hover:border-ring transition-all duration-150">
+    <TooltipProvider delayDuration={300}>
+      <div className="flex items-center justify-between gap-4 px-4 py-3 bg-card border border-border rounded-lg hover:border-ring transition-all duration-150">
 
-      {/* Info */}
-      <div className="flex flex-col gap-1 min-w-0">
-        <span className="text-sm font-medium text-foreground truncate">
-          {item.query}
-        </span>
-        <div className="flex items-center gap-2">
-          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badgeClass}`}>
-            {label}
-          </span>
-          <span className="text-xs text-muted-foreground">{fecha}</span>
+        {/* Info */}
+        <div className="flex flex-col gap-1 min-w-0">
+          <span className="text-sm font-medium text-foreground truncate">{item.query}</span>
+          <div className="flex items-center gap-2">
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badgeClass}`}>{label}</span>
+            <span className="text-xs text-muted-foreground">{fecha}</span>
+          </div>
+        </div>
+
+        {/* Acciones */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+
+          {tieneDetalle && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => onVerDetalle(item.resultado)}
+                  className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-accent transition-colors duration-150"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Ver detalle</TooltipContent>
+            </Tooltip>
+          )}
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => onEliminar(item.id)}
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-danger hover:bg-accent transition-colors duration-150"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M3 7h18" />
+                </svg>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Eliminar</TooltipContent>
+          </Tooltip>
+
         </div>
       </div>
-
-      {/* Acciones */}
-      <div className="flex items-center gap-2 flex-shrink-0">
-
-        {/* Ver detalle — solo si tiene resultado guardado */}
-        {tieneDetalle && (
-          <button
-            onClick={() => onVerDetalle(item.resultado)}
-            title="Ver detalle"
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-accent transition-colors duration-150"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </button>
-        )}
-
-        {/* Eliminar */}
-        <button
-          onClick={() => onEliminar(item.id)}
-          title="Eliminar"
-          className="p-1.5 rounded-lg text-muted-foreground hover:text-danger hover:bg-accent transition-colors duration-150"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M3 7h18" />
-          </svg>
-        </button>
-      </div>
-    </div>
+    </TooltipProvider>
   );
 }
