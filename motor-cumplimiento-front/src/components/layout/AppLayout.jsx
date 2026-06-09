@@ -38,7 +38,7 @@ export default function AppLayout({ children }) {
               title={dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
               className="w-9 h-9 flex items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
             >
-              {dark ? "Claro" : "Oscuro"}
+              {dark ? "☀️" : "🌙"}
             </button>
           </header>
 
