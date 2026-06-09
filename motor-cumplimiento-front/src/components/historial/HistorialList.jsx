@@ -34,8 +34,8 @@ export default function HistorialList({ onVerDetalle }) {
 
   const categorias = ['Todos', 'CUMPLE', 'NO_CUMPLE', 'POR_VENCER', 'DATO_FALTANTE'];
   const categoriaLabel = {
-    Todos: 'Todos', CUMPLE: '✔ Cumple', NO_CUMPLE: '✖ No Cumple',
-    POR_VENCER: '⚠ Por Vencer', DATO_FALTANTE: '— Sin datos',
+    Todos: 'Todos', CUMPLE: 'Cumple', NO_CUMPLE: 'No Cumple',
+    POR_VENCER: 'Por Vencer', DATO_FALTANTE: 'Sin datos',
   };
 
   const filtrado = historial.filter((h) => {
