@@ -50,6 +50,14 @@ const FORM_EJEMPLO = {
 
 const SECCIONES = ["seguro_accidentes", "registro_proveedor", "certificado_seguridad", "acreditacion_personal", "plan_emergencia"];
 
+const NOMBRES_SECCIONES = {
+  seguro_accidentes:     "REQ-001 · Seguro de Accidentes",
+  registro_proveedor:    "REQ-002 · Registro de Proveedor",
+  certificado_seguridad: "REQ-003 · Certificado de Seguridad",
+  acreditacion_personal: "REQ-004 · Acreditación de Personal",
+  plan_emergencia:       "REQ-005 · Plan de Emergencia",
+};
+
 function actualizarCampo(form, seccion, campo, valor) {
   return { ...form, [seccion]: { ...form[seccion], [campo]: valor } };
 }
@@ -107,17 +115,25 @@ export default function FormularioEvaluacion({ onResultado }) {
   const [form, setForm] = useState(FORM_INICIAL);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [intentoEnviar, setIntentoEnviar] = useState(false);
 
   const set = (seccion, campo) => (valor) => {
     setForm((prev) => actualizarCampo(prev, seccion, campo, valor));
   };
 
-  // Cuenta cuántas secciones tienen al menos un campo completado
-  const seccionesCompletas = useMemo(() => {
-    return SECCIONES.filter((seccion) =>
-      Object.values(form[seccion]).some((v) => v !== "" && v !== null)
-    ).length;
+  // Sección completa solo si TODOS sus campos están llenos
+  const completitudSecciones = useMemo(() => {
+    return Object.fromEntries(
+      SECCIONES.map((seccion) => [
+        seccion,
+        Object.values(form[seccion]).every((v) => v !== "" && v !== null && v !== undefined),
+      ])
+    );
   }, [form]);
+
+  const seccionesCompletas = useMemo(() => {
+    return SECCIONES.filter((s) => completitudSecciones[s]).length;
+  }, [completitudSecciones]);
 
   const handleSubmit = async () => {
     if (!form.nombre.trim()) {
@@ -125,8 +141,20 @@ export default function FormularioEvaluacion({ onResultado }) {
       toast.error("El nombre de la empresa es obligatorio.");
       return;
     }
+
+    const seccionesFaltantes = SECCIONES.filter((s) => !completitudSecciones[s]);
+    if (seccionesFaltantes.length > 0) {
+      setIntentoEnviar(true);
+      const lista = seccionesFaltantes.map((s) => NOMBRES_SECCIONES[s]).join(", ");
+      const msg = `Faltan completar: ${lista}`;
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
     setLoading(true);
     setError(null);
+    setIntentoEnviar(false);
     try {
       const resultado = await evaluarEmpresa(form);
       toast.success(`Evaluación completada — ${resultado.estado_general === "CUMPLE" ? "Cumple" : "No Cumple"}`);
@@ -183,7 +211,7 @@ export default function FormularioEvaluacion({ onResultado }) {
 
       {/* Secciones */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <SeccionRequisito emoji="" titulo="REQ-001 · Seguro de Accidentes del Trabajo">
+        <SeccionRequisito emoji="" titulo="REQ-001 · Seguro de Accidentes del Trabajo" completa={completitudSecciones.seguro_accidentes} conError={intentoEnviar && !completitudSecciones.seguro_accidentes}>
           <Campo label="N° Póliza"              value={form.seguro_accidentes.numero_poliza}                 onChange={set("seguro_accidentes", "numero_poliza")} />
           <Campo label="Aseguradora"            value={form.seguro_accidentes.aseguradora}                   onChange={set("seguro_accidentes", "aseguradora")} />
           <Campo label="Fecha Inicio"           value={form.seguro_accidentes.fecha_inicio}                  onChange={set("seguro_accidentes", "fecha_inicio")} type="date" />
@@ -191,7 +219,7 @@ export default function FormularioEvaluacion({ onResultado }) {
           <Campo label="Trabajadores Cubiertos" value={form.seguro_accidentes.numero_trabajadores_cubiertos} onChange={set("seguro_accidentes", "numero_trabajadores_cubiertos")} type="number" />
         </SeccionRequisito>
 
-        <SeccionRequisito emoji="" titulo="REQ-002 · Registro de Proveedor Minero">
+        <SeccionRequisito emoji="" titulo="REQ-002 · Registro de Proveedor Minero" completa={completitudSecciones.registro_proveedor} conError={intentoEnviar && !completitudSecciones.registro_proveedor}>
           <Campo label="N° Registro"          value={form.registro_proveedor.numero_registro}      onChange={set("registro_proveedor", "numero_registro")} />
           <Campo label="Entidad Registradora" value={form.registro_proveedor.entidad_registradora} onChange={set("registro_proveedor", "entidad_registradora")} />
           <Campo label="Fecha Inscripción"    value={form.registro_proveedor.fecha_inscripcion}    onChange={set("registro_proveedor", "fecha_inscripcion")} type="date" />
@@ -201,7 +229,7 @@ export default function FormularioEvaluacion({ onResultado }) {
           <Campo label="Fecha Vencimiento" value={form.registro_proveedor.fecha_vencimiento} onChange={set("registro_proveedor", "fecha_vencimiento")} type="date" />
         </SeccionRequisito>
 
-        <SeccionRequisito emoji="" titulo="REQ-003 · Certificado de Antecedentes de Seguridad">
+        <SeccionRequisito emoji="" titulo="REQ-003 · Certificado de Antecedentes de Seguridad" completa={completitudSecciones.certificado_seguridad} conError={intentoEnviar && !completitudSecciones.certificado_seguridad}>
           <Campo label="N° Certificado"  value={form.certificado_seguridad.numero_certificado}    onChange={set("certificado_seguridad", "numero_certificado")} />
           <Campo label="Entidad Emisora" value={form.certificado_seguridad.entidad_emisora}        onChange={set("certificado_seguridad", "entidad_emisora")} />
           <CampoSelect label="Resultado" value={form.certificado_seguridad.resultado} onChange={set("certificado_seguridad", "resultado")}
@@ -212,7 +240,7 @@ export default function FormularioEvaluacion({ onResultado }) {
           <Campo label="Período Evaluado (meses)" value={form.certificado_seguridad.periodo_evaluado_meses}  onChange={set("certificado_seguridad", "periodo_evaluado_meses")} type="number" />
         </SeccionRequisito>
 
-        <SeccionRequisito emoji="" titulo="REQ-004 · Acreditación de Competencias del Personal">
+        <SeccionRequisito emoji="" titulo="REQ-004 · Acreditación de Competencias del Personal" completa={completitudSecciones.acreditacion_personal} conError={intentoEnviar && !completitudSecciones.acreditacion_personal}>
           <Campo label="Total Trabajadores"         value={form.acreditacion_personal.total_trabajadores}         onChange={set("acreditacion_personal", "total_trabajadores")} type="number" />
           <Campo label="Trabajadores Certificados"  value={form.acreditacion_personal.trabajadores_certificados}  onChange={set("acreditacion_personal", "trabajadores_certificados")} type="number" />
           <Campo label="% Cobertura"                value={form.acreditacion_personal.porcentaje_cobertura}       onChange={set("acreditacion_personal", "porcentaje_cobertura")} type="number" />
@@ -222,7 +250,7 @@ export default function FormularioEvaluacion({ onResultado }) {
 
         <div className="col-span-2 flex justify-center">
           <div className="w-[calc(50%-8px)]">
-            <SeccionRequisito emoji="" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos">
+            <SeccionRequisito emoji="" titulo="REQ-005 · Plan de Emergencia y Gestión de Riesgos" completa={completitudSecciones.plan_emergencia} conError={intentoEnviar && !completitudSecciones.plan_emergencia}>
               <CampoSelect label="Tiene Plan" value={form.plan_emergencia.tiene_plan} onChange={set("plan_emergencia", "tiene_plan")}
                 opciones={[{ value: "true", label: "Sí" }, { value: "false", label: "No" }]}
               />
@@ -246,7 +274,7 @@ export default function FormularioEvaluacion({ onResultado }) {
       <div className="flex justify-between items-center pt-2">
         <Button
           variant="outline"
-          onClick={() => { setForm(FORM_EJEMPLO); toast.info("Ejemplo cargado"); }}
+          onClick={() => { setForm(FORM_EJEMPLO); setError(null); setIntentoEnviar(false); toast.info("Ejemplo cargado"); }}
           className="border-border text-muted-foreground hover:text-foreground"
         >
           Cargar ejemplo

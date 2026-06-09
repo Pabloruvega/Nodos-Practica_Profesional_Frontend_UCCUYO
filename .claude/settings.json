@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:www.dafont.com)",
       "Bash(Get-ChildItem -Path . -Force)",
-      "Bash(Select-Object Name)"
+      "Bash(Select-Object Name)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Nodos\\\\Nodos-Practica_Profesional_Frontend_UCCUYO\\\\motor-cumplimiento-front\\\\src\\\\components\\\\evaluacion\\\\\" -Recurse | Select-Object FullName)"
     ]
   }
 }
